@@ -81,7 +81,12 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "string_view": "cpp",
-        "xmemory0": "cpp"
+        "xmemory0": "cpp",
+        "bit": "cpp",
+        "charconv": "cpp",
+        "compare": "cpp",
+        "format": "cpp",
+        "stop_token": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

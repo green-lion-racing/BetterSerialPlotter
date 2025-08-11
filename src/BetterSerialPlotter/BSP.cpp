@@ -72,18 +72,16 @@ void BSP::update(){
         plot_monitor.paused_time = time;
     }
     
-    if(serial_manager.baud_status){
-        if (ImGui::BeginTabBar("MainAreaTabs")){
-            if (ImGui::BeginTabItem("Plots")){
-                plot_monitor.render();
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("SerialMonitor")){
-                serial_monitor.render();
-                ImGui::EndTabItem();
-            }
-            ImGui::EndTabBar();
+    if (ImGui::BeginTabBar("MainAreaTabs")){
+        if (ImGui::BeginTabItem("Plots")){
+            plot_monitor.render();
+            ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("SerialMonitor")){
+            serial_monitor.render();
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
     }
 
     ImGui::EndGroup();
