@@ -10,9 +10,8 @@ void SerialMonitor::render(){
     ImGui::Checkbox("Auto-Scroll",&auto_scroll);
     ImGui::BeginChild("Serial Monitor", ImVec2(-1, -1), true, serial_monitor_flags);
     {
-        std::lock_guard<std::mutex> lock(gui->serial_manager.mtx);
-        for (size_t i = 0; i < gui->PrintBuffer.size(); i++){
-            ImGui::Text(gui->PrintBuffer.get_vector()[i].c_str());
+        for (std::string message : messages){
+            ImGui::Text(message.c_str());
         }
     }
     if (auto_scroll) ImGui::SetScrollY(ImGui::GetScrollMaxY());

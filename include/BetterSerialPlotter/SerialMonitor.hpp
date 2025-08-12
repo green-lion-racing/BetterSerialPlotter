@@ -1,6 +1,7 @@
 #pragma once
 
 #include <BetterSerialPlotter/Widget.hpp>
+#include <deque>
 
 namespace bsp{
 
@@ -13,6 +14,8 @@ public:
     void render();
     /// constructor which takes in pointer to the main gui
     SerialMonitor(BSP* gui_);
+    /// contains current messages to be rendered
+    std::deque<std::string> messages; 
 
 private:
     bool auto_scroll = true; // defines whether serial monitor always scrolls to bottom or not

@@ -20,7 +20,7 @@ public:
     // variables related to the current state of the serial port
     // int  comport_num    = -1;    // serial port number selected (this is related to enums from SerialPort class in mahi-com)
                                  // -1 indicates that there is not comport num selected yet
-    int  baud_rate      = 9600;  // baud rate selected
+    int  baud_rate      = 115200;  // baud rate selected
     std::atomic<bool> serial_started = false; // indicates whether serial prot has been successfully opened
     std::atomic<bool> baud_status    = false; // indicates whether or not the serial port is consistently reading good data at this baud rate
     std::atomic<bool> serial_status  = false; // indicates that the program is able to receive any information from the serial port
@@ -35,7 +35,7 @@ public:
     int cycle_timeout = 5000;    //  how many cycles to wait before showing a timeout
 
     
-    static constexpr int packet_size = 1024;
+    static constexpr int packet_size = 4096;
 
     // abstracted serial port object for windows/mac/linux
     mahi::com::SerialPort serial_port;
@@ -64,6 +64,8 @@ public:
     int receive_data(unsigned char * message, int packet_size);
     /// returns human readable port name (e.g. COM5 for windows or ttyUSB3 for Linux)
     std::string get_port_name(BspPort port_num);
+    /// helper function to check if string start with something
+    bool starts_with(std::string_view str, std::string_view prefix);
     /// parses a buffer received from a serial port read
     void parse_buffer(unsigned char* message, size_t buff_len);
     /// parses a single line with unnamed data received from the buffer

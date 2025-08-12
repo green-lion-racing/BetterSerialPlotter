@@ -24,7 +24,7 @@ public:
     mahi::util::RingBuffer<std::string> PrintBuffer; // ring buffer to keep track of 
     mahi::util::Clock program_clock;                 // clock to track program time
     
-    bool verbose = false;
+    bool verbose = true;
     int num_plots = 1;
     float time = 0;
 
