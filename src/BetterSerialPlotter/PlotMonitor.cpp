@@ -18,6 +18,8 @@ PlotMonitor::PlotMonitor(BSP* gui_):
     }
 
 void PlotMonitor::render(){
+    ImVec2 available_size = ImGui::GetContentRegionAvail();
+    ImGui::BeginChild("ScrollableRegion", available_size, true, ImGuiWindowFlags_HorizontalScrollbar);
 
     for (auto i = 0; i < all_plots.size(); i++){
         all_plots[i].make_plot(paused ? paused_time : gui->time, i);
@@ -38,6 +40,8 @@ void PlotMonitor::render(){
         }
         ImGui::PopStyleColor();
     }
+
+    ImGui::EndChild();
 }
 
 void PlotMonitor::plot_all_data(){

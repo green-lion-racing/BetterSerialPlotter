@@ -209,7 +209,8 @@ void SerialManager::parse_buffer(unsigned char* buff, size_t buff_len){
                 }*/
 
                 std::string_view line = curr_line_buff;
-                if (starts_with(line, "temp")) {
+                // temporary exclusion to only work for lines I am interested in :)
+                if (starts_with(line, "IC")) {
                     std::vector<NamedSerialData> curr_data = parse_named_data_line(curr_line_buff);
                     gui->append_all_data(curr_data);
                 }
