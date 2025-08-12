@@ -144,7 +144,10 @@ void SerialManager::read_serial(){
             }
             // if we have waited too many cycles, indicate that serial is not functioning
             else{
-                if (++cycles_waited > cycle_timeout) serial_status = false;
+                if (++cycles_waited > cycle_timeout) {
+                    serial_status = false;
+                    baud_status = false;
+                }
             }
         } while (BytesRead > 0);
     }
@@ -179,7 +182,12 @@ void SerialManager::parse_buffer(unsigned char* buff, size_t buff_len){
                 gui->serial_monitor.messages.push_back(curr_line_buff);
                 if (gui->serial_monitor.messages.size() >= 5000)
                     gui->serial_monitor.messages.pop_front();
-                baud_status = true;
+
+                if (std::all_of(curr_line_buff.begin(), curr_line_buff.end(), [](char c) { return isprint(c) || isspace(c); })) {
+                    baud_status = true;
+                } else {
+                    baud_status = false;
+                }
                 
                 /*// Parse as unnamed data if regex matches
                 if (std::regex_match(curr_line_buff, unnamed_data_regex)){
@@ -307,6 +315,14 @@ bool SerialManager::comport_valid(){
     return comport_num != "";
 #else
     return comport_num > -1;
+#endif
+}
+
+bool SerialManager::baud_rate_valid(){
+#if defined(__APPLE__)
+    return baud_rate != "";
+#else
+    return baud_rate > -1;
 #endif
 }
 

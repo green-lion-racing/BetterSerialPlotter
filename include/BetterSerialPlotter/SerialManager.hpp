@@ -18,9 +18,6 @@ class SerialManager : public Widget
 public:
 
     // variables related to the current state of the serial port
-    // int  comport_num    = -1;    // serial port number selected (this is related to enums from SerialPort class in mahi-com)
-                                 // -1 indicates that there is not comport num selected yet
-    int  baud_rate      = 115200;  // baud rate selected
     std::atomic<bool> serial_started = false; // indicates whether serial prot has been successfully opened
     std::atomic<bool> baud_status    = false; // indicates whether or not the serial port is consistently reading good data at this baud rate
     std::atomic<bool> serial_status  = false; // indicates that the program is able to receive any information from the serial port
@@ -32,8 +29,23 @@ public:
     
     bool read_once    = false; // marks whether we have read through data at least once
     int cycles_waited = 0;     // number of cycles waited since a valid read, for timeouts
-    int cycle_timeout = 5000;    //  how many cycles to wait before showing a timeout
+    int cycle_timeout = 500000;    //  how many cycles to wait before showing a timeout
+    
+    // serial port number selected (this is related to enums from SerialPort class in mahi-com)
+    // -1 indicates that there is not comport num selected yet
+    #ifdef __APPLE__
+        BspPort comport_num;
+    #else
+        BspPort comport_num = -1;
+    #endif
 
+    // baud rate selected
+    // -1 indicates that there is not comport num selected yet
+    #ifdef __APPLE__
+        BspPort baud_rate;
+    #else
+        BspPort baud_rate = -1;
+    #endif
     
     static constexpr int packet_size = 4096;
 
@@ -72,14 +84,10 @@ public:
     std::vector<float> parse_unnamed_data_line(std::string line);
     /// parses a single line with named data received from the buffer
     std::vector<NamedSerialData> parse_named_data_line(std::string line);
-
+    /// whether a valid comport is selected
     bool comport_valid();
-
-#ifdef __APPLE__
-    BspPort comport_num;
-#else
-    BspPort comport_num = -1;
-#endif
+    /// whether a valid baud rate is selected
+    bool baud_rate_valid();
 
 private:
     // list of valid baudrates
@@ -97,7 +105,9 @@ private:
                                    57600,
                                    115200,
                                    128000,
-                                   256000};
+                                   256000,
+                                   500000,
+                                   1000000};
     
     
 };
