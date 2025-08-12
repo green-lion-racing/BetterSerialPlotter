@@ -20,9 +20,9 @@ public:
     bool open = true;
     bool deserialize_success = false;
     std::string deserialize_filepath;
-    
-    mahi::util::RingBuffer<std::string> PrintBuffer; // ring buffer to keep track of 
-    mahi::util::Clock program_clock;                 // clock to track program time
+
+    // clock to track program time
+    mahi::util::Clock program_clock;
     
     bool verbose = true;
     int num_plots = 1;

@@ -17,8 +17,7 @@ BSP::BSP(/* args */) :
     data_panel(this),
     serial_manager(this),
     plot_monitor(this),
-    serial_monitor(this),
-    PrintBuffer(200)
+    serial_monitor(this)
 {
     program_clock.restart();
     auto &app_colors = ImGui::GetStyle().Colors;
