@@ -246,7 +246,7 @@ void Plot::make_plot(float time, int plot_num){
 void Plot::plot_data(){
 
     for (auto i = 0; i < all_plot_data.size(); i++){
-        if (get_data(all_plot_data[i]) == std::nullopt) break;
+        if (get_data(all_plot_data[i]) == std::nullopt || get_data(all_plot_data[i])->get().Data.empty()) break;
         // get the correct set of data based on what we are currently doing
         auto &curr_data = plot_monitor->paused ? all_plot_paused_data[i] : get_data(all_plot_data[i])->get();
         auto &curr_identifier = plot_monitor->paused ? all_plot_paused_data[i].identifier : all_plot_data[i];
