@@ -25,22 +25,29 @@ void DataPanel::render(){
                         ImGui::TextUnformatted(gui->get_name(gui->all_data[i].identifier).c_str());
                         ImGui::EndDragDropSource();
                     }
-                    if (ImGui::BeginPopupContextItem()){
+                    
+                    // Open popup on right-click (if not already open)
+                    if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
+                        ImGui::OpenPopup(("popup" + std::to_string(i)).c_str());
+                    }
+
+                    if (ImGui::BeginPopup(("popup" + std::to_string(i)).c_str())) {
                         static char name[24];
-                        if(i != editing_num){
-                            editing_num = i;
-                            strcpy(name,gui->get_name(gui->all_data[i].identifier).c_str());
-                        }
+                        strcpy(name, gui->get_name(gui->all_data[i].identifier).c_str());
                         ImGui::Text("Edit name:");
                         ImGui::SameLine();
                         ImGui::PushItemWidth(120);
-                        ImGui::InputText(("##edit" + std::to_string(i)).c_str(), name, IM_ARRAYSIZE(name));
+                        if (ImGui::InputText(("##edit" + std::to_string(i)).c_str(), name, IM_ARRAYSIZE(name))) {
+                            if (gui->get_name(gui->all_data[i].identifier).c_str() != name) {
+                                gui->all_data_info[gui->all_data[i].identifier].set_name(name);
+                            }
+                        }
                         ImGui::PopItemWidth();
                         ImGui::Text("Edit color:");
                         ImGui::SameLine();
                         ImGui::ColorEdit4("##Color", (float*)&gui->all_data_info[gui->all_data[i].identifier].color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-                        ImGui::Text("Plots Active:");
                         ImGui::Separator();
+                        ImGui::Text("Plots Active:");
                         for (auto &plot : gui->plot_monitor.all_plots){
                             auto curr_identifier = gui->all_data[i].identifier;
                             if(ImGui::BeginMenu(plot.name.c_str())){
@@ -67,11 +74,6 @@ void DataPanel::render(){
                                 }
                                 ImGui::EndMenu();
                             }
-                        }
-                        
-                        if (ImGui::Button("Save") || (ImGui::IsKeyPressed(257)) || (ImGui::IsKeyPressed(335))){ // would change for mac/linux
-                            gui->all_data_info[gui->all_data[i].identifier].set_name(name);
-                            ImGui::CloseCurrentPopup();
                         }
                         ImGui::EndPopup();
                     }
