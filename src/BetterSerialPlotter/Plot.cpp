@@ -61,7 +61,7 @@ void Plot::make_plot(float time, int plot_num){
             ImPlot::SetNextPlotLimitsX(x_min, x_max, ImGuiCond_Always);
         }
         // set y_axis limits if autoscaled
-        if (autoscale && get_data(y_axis.begin()->first) != std::nullopt){
+        if (autoscale && !y_axis.empty() && get_data(y_axis.begin()->first) != std::nullopt){
             // vectors which contain min and max for y axis 0 and y axis 1
             std::vector<float> y_min = {0.0f,0.0f};
             std::vector<float> y_max = {1.0f,1.0f};
@@ -70,7 +70,7 @@ void Plot::make_plot(float time, int plot_num){
             // go through each of the variables for the plot
             for (auto it = y_axis.begin(); it != y_axis.end(); it++){
                 // make sure the variable has data first
-                if(!get_data(it->first)->get().Data.empty()){
+                if(get_data(it->first).has_value() && !get_data(it->first)->get().Data.empty()){
 
                     auto x_vals = get_data(it->first)->get().get_x();
                     auto y_vals = get_data(it->first)->get().get_y();
@@ -212,13 +212,15 @@ void Plot::make_plot(float time, int plot_num){
             ImGui::EndPopup();
         }
 
-        // update and region of the plot for dragging to resize        
+        // update and region of the plot for dragging to resize
         plot_y_end = ImGui::GetWindowPos().y + ImGui::GetWindowContentRegionMax().y;
+        plot_x_start = ImGui::GetWindowPos().x;
+        plot_x_end = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
         ImPlot::EndPlot();
     }
     
     // reize plot if we are in the right area
-    if (ImGui::GetMousePos().y <= plot_y_end + resize_area && ImGui::GetMousePos().y >= plot_y_end - resize_area){
+    if (ImGui::GetMousePos().y <= plot_y_end + resize_area && ImGui::GetMousePos().y >= plot_y_end - resize_area && ImGui::GetMousePos().x <= plot_x_end && ImGui::GetMousePos().x >= plot_x_start){
         ImGui::SetMouseCursor(3);
         if (ImGui::IsMouseClicked(0)){
             is_resizing = true;

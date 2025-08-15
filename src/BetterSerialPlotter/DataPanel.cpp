@@ -34,7 +34,7 @@ void DataPanel::render(){
                     if (ImGui::BeginPopup(("popup" + std::to_string(i)).c_str())) {
                         static char name[24];
                         strcpy(name, gui->get_name(gui->all_data[i].identifier).c_str());
-                        ImGui::Text("Edit name:");
+                        ImGui::Text("Edit name ");
                         ImGui::SameLine();
                         ImGui::PushItemWidth(120);
                         if (ImGui::InputText(("##edit" + std::to_string(i)).c_str(), name, IM_ARRAYSIZE(name))) {
@@ -43,11 +43,10 @@ void DataPanel::render(){
                             }
                         }
                         ImGui::PopItemWidth();
-                        ImGui::Text("Edit color:");
+                        ImGui::Text("Edit color ");
                         ImGui::SameLine();
                         ImGui::ColorEdit4("##Color", (float*)&gui->all_data_info[gui->all_data[i].identifier].color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
                         ImGui::Separator();
-                        ImGui::Text("Plots Active:");
                         for (auto &plot : gui->plot_monitor.all_plots){
                             auto curr_identifier = gui->all_data[i].identifier;
                             if(ImGui::BeginMenu(plot.name.c_str())){
